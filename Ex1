@@ -1,0 +1,133 @@
+/*The code relative to Date is passed as comment as it adds to many errors*/
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+/*Creation of the class date, to set the date of the measures*/
+/*class Date{
+  private:
+    int day;
+    int month;
+    int year;
+  public:
+    Date(){day=0; month=0; year=0;}
+    Date(int d, int m, int y): day{d}, month{m}, year{y} {}
+
+  void printDate(){
+    cout<<day<<"/"<<month<<"/"<<year<<endl;
+  }  
+
+  int getDate_day(){
+    return day;
+  }
+  int getDate_month(){
+    return month;
+  }
+  int getDate_year(){
+    return year;
+  }
+};*/
+
+/*Creation of the class Blood to retrieve systolic and diastolic data */
+class Blood /*: Date*/{
+  private:
+    int systolic;
+    int diastolic;
+    /*Date a;*/
+  public:
+    Blood(){systolic=0;diastolic=0;/* a = Date();*/} /* Constructor*/
+    Blood(int s, int d/*, class Date dmy*/) {systolic=s, diastolic=d/*, a=dmy*/;} /* Constructor*/
+  
+  void printBlood(){
+    cout<<"Systolic: "<<systolic<<" "<<"Diastolic"<<diastolic<<endl;
+  }
+
+  int getSystolic(){
+    return systolic;
+  }
+
+  int getDiastolic(){
+    return diastolic;
+  }
+
+
+};
+
+/* Create a function Patient which should allow to link a patient with its blood data and the date relative to it. The goal was to make Patient inherit from Blood so that it could use Blood function getSystolic, getDiastolic to retrieve those data, however I wasn't able to understand fully and to write a working code */
+class Patient : public Blood {
+  private :
+    string name;
+  public :
+    vector<Blood>patient_record; /* Creating a vector which will store all the data */
+    Patient(){
+      name="n";
+    }
+    Patient(const string n){ 
+      name=n;    }
+    
+    void addRecord(vector <Blood>patient_record){ /* Creating the function which will allow to store all the necessary data inside the vector to form a Record*/
+      patient_record.push_back(Blood(a.getSystolic())); /* Ex: store the data returned from function getSystolic from class Blood into the vector patient_record */
+      patient_record.push_back(Blood(a.getDiastolic()));
+      /*patient_record.push_back(Blood(a.getDate_day()));
+      patient_record.push_back(Blood(a.getDate_month()));
+      patient_record.push_back(Blood(a.getDate_year()));*/
+    }
+
+    /*Function to return the highest value from the systolic data from a patient, but also its position in the array so that it can be used during the printing of the report. Since cannot return two values or simple array, used a static array.*/
+    int* highest_record(){
+      static int arr[2]={};
+      int place_highest_value =0;
+      int size = patient_record.size();
+      int highest_value =0;
+      for(int i=0; i<size;i++){
+        if (patient_record[i].getSystolic()>highest_value){
+          highest_value=patient_record[i].getSystolic();
+          place_highest_value=i;
+        }
+      }
+      arr[0]=highest_value;
+      arr[1]= place_highest_value;
+      return arr;
+    }
+
+    /*Function to return the average of diastolic value of a patient*/
+    int diastolic_average(){
+      int size = patient_record.size();
+      int sum_values = 0;
+      int diastolic_average=0;
+      for (int i=0; i<=size;i++){
+        sum_values +=patient_record[i].getDiastolic();
+      }
+      diastolic_average =sum_values /size;
+      return diastolic_average;
+    }
+
+    /*Function to print a report*/
+    void printReport(){
+      int* max_record =highest_record();
+      int diast_avrg= diastolic_average();
+      cout<< " Patient :"<<name<< endl;
+      cout<< "Record -"<<endl;
+      if(max_record[0]>140){
+        cout<<"Highest systolic pressure : "<<highest_record()<<endl<<"Corresponding diastolic value : "<<patient_record[max_record[1]].getDiastolic()<<endl/*<<"Date of measure : "<<patient_record[max_record[1]].getDate_day()<<"/"<<patient_record[max_record[1]].getDate_month()<<"/"<<patient_record[max_record[1]].getDate_year()*/;
+      }
+      else{
+        cout<<"No measurement was to high";
+      }
+      cout<<"Average diastolic blood presure : "<< diast_avrg;
+    }
+
+};
+
+int main() {
+  Patient mary ("Mary");
+  mary.addRecord(Blood(94,61/*, Date(2,5,2013)*/));
+  mary.addRecord(Blood(97,65/*, Date(3,5,2013)*/));
+  mary.addRecord(Blood(144,99/*, Date(4,5,2013)*/));
+  mary.addRecord(Blood(123,88/*, Date(5,5,2013)*/));
+  mary.addRecord(Blood(177,110/*, Date(6,5,2013)*/));
+  mary.addRecord(Blood(145,89/*, Date(7,5,2013)*/));
+  mary.printReport();
+  return 0;
+}

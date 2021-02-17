@@ -1,0 +1,118 @@
+/* Most function work except for top which stops creates an exit. Didn't find a way to fix this issue*/
+
+#include<iostream>
+#include<vector>
+using namespace std;
+
+/*Class that was given at the beginning of the exercise */
+template <class T>
+
+class StackI {
+public:
+virtual void push(T t) = 0;
+virtual void pop() = 0;
+T top() =0;
+virtual bool isEmpty() =0;
+virtual void print()=0;
+};
+
+/* Since the array has to be able to hold different type of data we apply a template class*/
+template <class T>
+class Stack {
+private:
+  int topstack; /*topstack=gives the top of the array*/
+  int size;
+  int status;
+  T *stack_array; /* creates a array */
+public:
+
+/*constructor*/
+  Stack(){
+    topstack =-1;
+    size = 20;
+    status=0;
+    T *stack_array = new T [20];
+  }
+
+/*constructor for array of type T to be determined */
+  Stack(int s){
+    topstack=-1;
+    size=s;
+    status=0;
+    stack_array = new T [size];
+  }
+
+/* Function to check if the array is empty or not, to do so, if the top of the stack is below 0, then it is empty */
+  bool isEmpty(){
+    if (topstack==-1){
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
+/*Function to add a value t of type R at the top of the array, each time it is done, the number of the top of the array (topstack) is increased by one*/
+  void push(T t){
+    if (topstack==(size-1))
+    {
+      status=0;
+      cout <<"FullStackException"<<endl;
+    }
+    else
+    {
+      status =1;
+      ++topstack;
+      stack_array[topstack]=t;
+    }
+  }
+
+/*Function to delete a value t of type R at the top of the array, each time it is done, the number of the top of the array (topstack) is decreased by one*/
+  void pop(){
+    if(topstack==-1){
+      cout<<"EmptyStackException";
+    }
+    else{
+      topstack--;
+    }
+  }
+
+/*Function returning the top of the array, that is to say the last element, probably the problem comes from calling with a type T*/
+  T top(){
+    if(topstack==-1){
+      cout<<"EmptyStackException";
+    }
+    else{
+      cout<<"Top element of the stack is: "<<stack_array[topstack]<<endl;
+    }
+  }
+
+/*Function to print the stack T*/
+  void print(){
+    if (topstack==-1){
+      cout<<"[]"<<endl;
+    }
+    else{
+      cout<<"[";
+      for( int i=topstack; i>0;i--)
+        cout<<stack_array[i]<<" ";
+      cout<<stack_array[0]<<"]"<<endl;
+    }
+  }
+
+};
+
+/*Example*/
+int main(){
+  Stack<int> stack {5};
+  stack.print();
+  stack.push(5);
+  stack.push(1);
+  stack.push(10);
+  stack.push(2);
+  stack.print();
+  stack.pop();
+  stack.print();
+  stack.push(3);
+  stack.top();
+}
